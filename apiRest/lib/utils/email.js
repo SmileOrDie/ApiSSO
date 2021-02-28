@@ -96,14 +96,12 @@ const emailValidate = (value) => {
     )
 
     if (typeof value !== 'string') {
-        console.log('test 1')
         errSig.debug.value = value
 
         throw errSig
     }
 
     if (!defaultRegex.test(value)) {
-        console.log('test 2')
         errSig.debug.regex = defaultRegex.toString()
         errSig.debug.value = value
 
@@ -113,7 +111,6 @@ const emailValidate = (value) => {
     const username = value.substr(0, value.indexOf('@'))
 
     if (!usernameRegex.test(username)) {
-        console.log('test 13')
         errSig.debug.regex = usernameRegex.toString()
         errSig.debug.username = username
 
@@ -123,7 +120,6 @@ const emailValidate = (value) => {
     const domain = value.substr(value.indexOf('@'))
 
     if (!domainRegex.test(domain)) {
-        console.log('test 7')
         errSig.debug.regex = domainRegex.toString()
         errSig.debug.domain = domain
 

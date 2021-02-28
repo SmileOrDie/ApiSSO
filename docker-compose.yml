@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:11.3-alpine
+    environment:
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

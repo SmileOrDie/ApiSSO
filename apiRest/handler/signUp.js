@@ -22,8 +22,14 @@ const signup = async (req) => {
     try {
         emailValidate(login)
         user = await createUserModel({ email: login, password })
-    } catch (e) {
+    } catch (warning) {
+        const defaultRegex = new RegExp(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,6}$/)
+        if (login && defaultRegex.test(login)) {
+            console.warn('Email-Invalide it set like username' , warning, login)
+        }
+
         user = await createUserModel({ username: login, password })
+        console.log(user)
     }
 
     await createProfileModel(user)

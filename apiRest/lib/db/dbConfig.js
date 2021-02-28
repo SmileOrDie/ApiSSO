@@ -1,8 +1,8 @@
 const { ENV_PG_VARS, JWT_TABLE, USER_TABLE, PROFILE_TABLE, ENVIRONMENT } = require('../../config')
-const { Client } = require('pg')
+const { Pool } = require('pg')
 
 const request = async (query) => {
-    const client = new Client(ENV_PG_VARS)
+    const client = new Pool(ENV_PG_VARS)
     await client.connect()
     client.query(query, (err, res) => {
         client.end()

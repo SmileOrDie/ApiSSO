@@ -7,7 +7,9 @@ const DbRepertory = require('../db/DbRepertory')
 
 const dbRepertory = new DbRepertory()
 
-const createUserModel = async ({ email, username, password }) => {
+const beginUsernameDefault = 'user-'
+
+const createUserModel = async ({ username, password, email = '' }) => {
     if (!email && !username) {
         throw {
             msg: "email and username can't be empty to create account",
@@ -17,27 +19,38 @@ const createUserModel = async ({ email, username, password }) => {
             },
         }
     }
-
-    if (email) {
-        email = clean(email)
-        emailValidate(email)
-    }
     if (!username) {
-        username = 'user-' + Date.now() + '-' + genRandomString(6)
+        username = beginUsernameDefault + Date.now() + '-' + genRandomString(7)
     }
 
     const passwordInfo = generatePasswordInfo(password)
 
     const user = {
         id: uuid(),
-        email,
         username,
         passwordhash: passwordInfo.passwordHash,
         salt: passwordInfo.passwordSalt,
         strategy: passwordInfo.passwordStrategy,
         createdat: Date.now(),
     }
-    await dbRepertory.createItem(new User(user))
+
+    if (email) {
+        user.email = clean(email)
+        emailValidate(user.email)
+    }
+    try {
+        await dbRepertory.createItem(new User(user))
+    } catch (err) {
+        throw {
+            status: 400,
+            msg: err.detail,
+            debug: {
+                previousError: err,
+                email,
+                username,
+            },
+        }
+    }
     return user
 }
 
